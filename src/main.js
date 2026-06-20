@@ -113,14 +113,14 @@ scene("title_screen", () => {
     ]);
 
     titleMenu.add([
-        text("game-title", { size: 40 }),
+        text("Bird", { size: 40 }),
         color(BLACK),
         anchor("top"),
         pos(0, -100),
     ]);
 
     titleMenu.buttons = [
-        ["Escape!!", () => go("game_loop")],
+        ["Escape!!", () => go("game_loop"), rgb(244, 66, 94)],
         ["How to play", () => go("instructions")],
     ].map(([txt, fn, bg], i) =>
         titleMenu.add([
@@ -158,6 +158,66 @@ scene("title_screen", () => {
         ])
     );
 
+})
+
+scene("instructions", () => {
+    const instructionsMenu = add([
+        rect(400, 400, { radius: 10 }),
+        color(255, 255, 255),
+        outline(4),
+        anchor("center"),
+        pos(center()),
+    ]);
+
+    const title = instructionsMenu.add([
+        text("Instructions", { size: 40 }),
+        color(BLACK),
+        anchor("top"),
+        pos(0, -instructionsMenu.height / 2),
+    ]);
+
+    title.add([
+        text("Words and blabber"),
+        color(BLACK),
+        anchor("top"),
+        pos(0, title.height),
+    ])
+
+    instructionsMenu.add([
+        anchor("center"),
+        pos(0, instructionsMenu.height / 2.5),
+        scale(1),
+
+        {
+            add() {
+                this.btnWidth = instructionsMenu.width - 64;
+                this.btnHeight = this.height + 24;
+
+                this.use(
+                    area({
+                        shape: new Rect(vec2(0), this.btnWidth, this.btnHeight),
+                    })
+                );
+
+                this.onClick(() => go("title_screen"));
+                this.onHover(() => tween(vec2(1), vec2(1.06), 0.15, s => this.scale = s, easings.easeOutBack));
+                this.onHoverEnd(() => tween(this.scale, vec2(1), 0.15, s => this.scale = s, easings.easeOutBack));
+            },
+
+            draw() {
+                drawRect({
+                    width: this.btnWidth,
+                    height: this.btnHeight,
+                    color: rgb(0, 127, 255),
+                    radius: 8,
+                    outline: { width: 4, color: BLACK },
+                    anchor: this.anchor,
+                });
+            },
+        },
+
+        text("Main Menu", { size: 22 }),
+    ])
 })
 
 go("title_screen")
