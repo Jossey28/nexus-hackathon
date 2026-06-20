@@ -16,35 +16,43 @@ k.loadSprite("bird", "sprites/bird.png");
 const bird = add([
     sprite("bird"),
     scale(0.25),
-    color(RED),
 
     anchor("center"),
     pos(center()),
     rotate(90),
 ])
 
+function createBorders() {
+    const floorThickness = 50;
+    const floorColor = Color.fromHex("#8B5E3C")
+
+    const ceiling = [
+        rect(width(), floorThickness),
+        pos(0, 0),
+        color(Color.fromHex("#8B5E3C")),
+    ];
+
+    const ground = [
+        rect(width(), floorThickness),
+        pos(0, height() - floorThickness),
+        color(floorColor),
+    ];
+
+    return [ceiling, ground]
+}
 
 
-scene("display_bird", () => {
-    add([
 
-    ]);
+
+scene("game_loop", () => {
+    const [ceiling, ground] = createBorders();
+
+    add(ceiling);
+    add(ground);
 })
 
-onUpdate(() => {
-    if (isKeyDown("h")) {
 
-    }
-})
-
-onKeyPress("space", () => {
-    debug.log("spaced");
-});
-
-onAdd("shape", () => {
-    debug.log("shaped");
-});
 
 // k.onClick(() => k.addKaboom(k.mousePos()));
 
-k.go("display_bird")
+k.go("game_loop")
