@@ -1,6 +1,10 @@
 import kaplay from "kaplay";
-// import "kaplay/global"; // uncomment if you want to use without the k. prefix
+import "kaplay/global";
 
+const GRAVITY = 200;
+
+const UP_FORCE = 2000;
+const DOWN_FORCE = 2000;
 
 const k = kaplay({
     width: 700,
@@ -9,18 +13,27 @@ const k = kaplay({
     canvas: document.querySelector("#kaplay-game")
 });
 
-k.loadRoot("./"); // A good idea for Itch.io publishing later
+loadRoot("./"); // A good idea for Itch.io publishing later
 
-k.loadSprite("bird", "sprites/bird.png");
+loadSprite("bird", "sprites/bird.png");
 
-const bird = add([
-    sprite("bird"),
-    scale(0.25),
+setGravity(GRAVITY);
 
-    anchor("center"),
-    pos(center()),
-    rotate(90),
-])
+function createBird() {
+    const bird = add([
+        sprite("bird"),
+        scale(0.25),
+
+        anchor("center"),
+        rotate(90),
+
+        pos(center()),
+        area(),
+        body(),
+    ]);
+
+    return bird
+}
 
 function createBorders() {
     const floorThickness = 50;
@@ -41,18 +54,28 @@ function createBorders() {
     return [ceiling, ground]
 }
 
-
-
-
 scene("game_loop", () => {
     const [ceiling, ground] = createBorders();
+    const bird = createBird();
 
     add(ceiling);
     add(ground);
+
+    onClick(() => addKaboom(mousePos()));
+
+    // onUpdate(() => {
+    //     if (isKeyDown("space")) {
+
+    //     }
+    // });
+
+    onKeyDown("up", () => {
+        bird.vel.y -= dt() * UP_FORCE;
+    })
+
+    onKeyDown("down", () => {
+        bird.vel.y += dt() * DOWN_FORCE;
+    })
 })
 
-
-
-// k.onClick(() => k.addKaboom(k.mousePos()));
-
-k.go("game_loop")
+go("game_loop")
