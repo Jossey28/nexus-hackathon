@@ -1,6 +1,10 @@
 import kaplay from "kaplay";
 import "kaplay/global";
 
+const GRAVITY = 200;
+
+const UP_FORCE = 2000;
+const DOWN_FORCE = 2000;
 
 const k = kaplay({
     width: 700,
@@ -13,20 +17,20 @@ loadRoot("./"); // A good idea for Itch.io publishing later
 
 loadSprite("bird", "sprites/bird.png");
 
-setGravity(3200);
+setGravity(GRAVITY);
 
 function createBird() {
-    const bird = [
+    const bird = add([
         sprite("bird"),
         scale(0.25),
 
         anchor("center"),
-        pos(center()),
         rotate(90),
 
-        area({ isSensor: true }),
+        pos(center()),
+        area(),
         body(),
-    ];
+    ]);
 
     return bird
 }
@@ -57,8 +61,6 @@ scene("game_loop", () => {
     add(ceiling);
     add(ground);
 
-    add(bird);
-
     onClick(() => addKaboom(mousePos()));
 
     // onUpdate(() => {
@@ -67,15 +69,12 @@ scene("game_loop", () => {
     //     }
     // });
 
-    onKeyPress("up", () => {
-        // bird.pos = pos(0, height());
-        bird.pos.move(1, 1);
-        debug.log("ts not working bro");
+    onKeyDown("up", () => {
+        bird.vel.y -= dt() * UP_FORCE;
     })
 
-    onKeyPress("down", () => {
-        bird.pos = pos(0, 0);
-        debug.log("ts not working bro 2");
+    onKeyDown("down", () => {
+        bird.vel.y += dt() * DOWN_FORCE;
     })
 })
 
