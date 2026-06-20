@@ -30,6 +30,9 @@ loadSprite("bird", "sprites/bird.png");
 
 setGravity(GRAVITY);
 
+window.deathPixel = document.createElement("div");
+window.deathPixel.textContent = "alive";
+
 scene("game_loop", () => {
     const floorThickness = 25;
     const floorColor = Color.fromHex("#8B5E3C")
@@ -85,8 +88,12 @@ scene("game_loop", () => {
     ]);
 
     bird.onUpdate(() => {
+        debug.log(window.deathPixel.textContent);
+
         if ((bird.pos.y) >= (height() - floorThickness) || (bird.pos.y) <= (floorThickness)) {
             debug.log("you just died");
+
+            window.deathPixel.textContent = "dead";
             go("title_screen");
         }
     })
@@ -173,14 +180,14 @@ scene("instructions", () => {
         text("Instructions", { size: 40 }),
         color(BLACK),
         anchor("top"),
-        pos(0, -instructionsMenu.height / 2),
+        pos(0, -instructionsMenu.height / 2.3),
     ]);
 
     title.add([
-        text("Words and blabber"),
+        text("Words and blabber", { size: 23 }),
         color(BLACK),
         anchor("top"),
-        pos(0, title.height),
+        pos(0, title.height * 1.5),
     ])
 
     instructionsMenu.add([
