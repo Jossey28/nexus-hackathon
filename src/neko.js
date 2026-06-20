@@ -41,39 +41,37 @@
     return directionRows.indexOf("NE");
   }
 
-  function loop(timestamp) {
-    if (timestamp - lastTime > 120) {
-      lastTime = timestamp;
-      frame++;
+function loop(timestamp) {
+  if (timestamp - lastTime > 120) {
+    lastTime = timestamp;
+    frame++;
 
-      const dx = mouseX - posX;
-      const dy = mouseY - posY;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      const moving = dist > 48;
+    const dx = mouseX - posX;
+    const dy = mouseY - posY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const moving = dist > 48;
 
-      let rowIndex;
+    const rowIndex = (getDirectionIndex(dx || 1, dy || 0) + 4) % 8;
 
-      if (moving) {
-        const speed = 6;
-        posX += (dx / dist) * speed;
-        posY += (dy / dist) * speed;
+    if (moving) {
+      const speed = 6;
+      posX += (dx / dist) * speed;
+      posY += (dy / dist) * speed;
 
-        rowIndex = (getDirectionIndex(dx, dy) + 4) % 8; // jump sheet is rotated, flip it
-        const f = frame % jumpFrames;
-        frogEl.style.backgroundImage = "url('/sprites/frog-jump.png')";
-        frogEl.style.backgroundPosition = `-${f * frameW}px -${rowIndex * frameH}px`;
-      } else {
-        rowIndex = getDirectionIndex(dx || 1, dy || 0); // idle sheet is correct as-is
-        const f = frame % idleFrames;
-        frogEl.style.backgroundImage = "url('/sprites/frog-idle.png')";
-        frogEl.style.backgroundPosition = `-${f * frameW}px -${rowIndex * frameH}px`;
-      }
-
-      frogEl.style.left = `${posX - (frameW * scale) / 2}px`;
-      frogEl.style.top = `${posY - (frameH * scale) / 2}px`;
+      const f = frame % jumpFrames;
+      frogEl.style.backgroundImage = "url('/sprites/frog-jump.png')";
+      frogEl.style.backgroundPosition = `-${f * frameW}px -${rowIndex * frameH}px`;
+    } else {
+      const f = frame % idleFrames;
+      frogEl.style.backgroundImage = "url('/sprites/frog-idle.png')";
+      frogEl.style.backgroundPosition = `-${f * frameW}px -${rowIndex * frameH}px`;
     }
-    requestAnimationFrame(loop);
+
+    frogEl.style.left = `${posX - (frameW * scale) / 2}px`;
+    frogEl.style.top = `${posY - (frameH * scale) / 2}px`;
   }
+  requestAnimationFrame(loop);
+}
 
   requestAnimationFrame(loop);
 })();
