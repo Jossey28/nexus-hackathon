@@ -34,17 +34,43 @@ scene("game_loop", () => {
     const floorThickness = 25;
     const floorColor = Color.fromHex("#8B5E3C")
 
-    const ceiling = [
+    const ceiling = add([
         rect(width(), floorThickness),
         pos(0, 0),
         color(Color.fromHex("#8B5E3C")),
-    ];
+    ]);
 
-    const ground = [
+    const ground = add([
         rect(width(), floorThickness),
         pos(0, height() - floorThickness),
         color(floorColor),
-    ];
+    ]);
+
+
+    const stalactite = add([
+        rotate(180),
+        pos(0, (floorThickness - 10)),
+
+        polygon(
+            [
+                vec2(-15, 10),
+                vec2(15, 10),
+                vec2(0, -10),
+            ]
+        ),
+
+        area({
+            shape: new Polygon(
+                [
+                    vec2(-15, 10),
+                    vec2(15, 10),
+                    vec2(0, -10),
+                ]
+            )
+        }),
+
+        color(RED),
+    ])
 
     const bird = add([
         sprite("bird"),
@@ -59,14 +85,12 @@ scene("game_loop", () => {
     ]);
 
     bird.onUpdate(() => {
-        if (bird.pos.y >= (height() - floorThickness) || bird.pos.y <= (floorThickness)) {
+        if ((bird.pos.y) >= (height() - floorThickness) || (bird.pos.y) <= (floorThickness)) {
             debug.log("you just died");
             go("title_screen");
         }
     })
 
-    add(ceiling);
-    add(ground);
 
     onClick(() => addKaboom(mousePos()));
 
@@ -89,19 +113,51 @@ scene("title_screen", () => {
     ]);
 
     titleMenu.add([
-        text("Escape!!", { size: 40 }),
+        text("game-title", { size: 40 }),
         color(BLACK),
         anchor("top"),
         pos(0, -100),
     ]);
 
-    titleMenu.button = [
-        ""
-    ]
+    titleMenu.buttons = [
+        ["Escape!!", () => go("game_loop")],
+        ["How to play", () => go("instructions")],
+    ].map(([txt, fn, bg], i) =>
+        titleMenu.add([
+            anchor("center"),
+            pos(0, 60 * i - 20),
+            {
+                add() {
+                    this.btnWidth = titleMenu.width - 64;
+                    this.btnHeight = this.height + 24;
 
-    onKeyPress(() => {
-        go("game_loop");
-    })
+                    this.use(
+                        area({
+                            shape: new Rect(vec2(0), this.btnWidth, this.btnHeight),
+                        })
+                    );
+
+                    fn && this.onClick(fn);
+                    this.onHover(() => tween(vec2(1), vec2(1.06), 0.15, s => this.scale = s, easings.easeOutBack));
+                    this.onHoverEnd(() => tween(this.scale, vec2(1), 0.15, s => this.scale = s, easings.easeOutBack));
+                },
+
+                draw() {
+                    drawRect({
+                        width: this.btnWidth,
+                        height: this.btnHeight,
+                        color: bg ?? rgb(0, 127, 255),
+                        radius: 8,
+                        outline: { width: 4, color: BLACK },
+                        anchor: this.anchor,
+                    });
+                },
+            },
+            text(txt, { size: 22 }),
+            scale(1),
+        ])
+    );
+
 })
 
 go("title_screen")
