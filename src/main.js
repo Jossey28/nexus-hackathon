@@ -70,11 +70,11 @@ scene("game_loop", () => {
 
     onClick(() => addKaboom(mousePos()));
 
-    onKeyDown("flyUp", () => {
+    onButtonDown("flyUp", () => {
         bird.vel.y -= dt() * UP_FORCE;
     })
 
-    onKeyDown("flyDown", () => {
+    onButtonDown("flyDown", () => {
         bird.vel.y += dt() * DOWN_FORCE;
     })
 })
