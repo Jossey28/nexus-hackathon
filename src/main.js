@@ -1,10 +1,10 @@
 import kaplay from "kaplay";
 import "kaplay/global";
 
-const GRAVITY = 150;
+const GRAVITY = 0;
 
-const UP_FORCE = 500;
-const DOWN_FORCE = 500;
+const MAX_UP_FORCE = -10;
+const MAX_DOWN_FORCE = 10;
 
 const k = kaplay({
     width: 700,
@@ -41,12 +41,15 @@ scene("game_loop", () => {
         rect(width(), floorThickness),
         pos(0, 0),
         color(Color.fromHex("#8B5E3C")),
+        area({ isSensor: true }),
     ]);
 
     const ground = add([
         rect(width(), floorThickness),
         pos(0, height() - floorThickness),
         color(floorColor),
+        area(),
+        area({ isSensor: true }),
     ]);
 
 
@@ -87,26 +90,28 @@ scene("game_loop", () => {
         body(),
     ]);
 
-    bird.onUpdate(() => {
-        debug.log(window.deathPixel.textContent);
+    // bird.onUpdate(() => {
+    //     if ((bird.pos.y) >= (height() - floorThickness) || (bird.pos.y) <= (floorThickness)) {
 
-        if ((bird.pos.y) >= (height() - floorThickness) || (bird.pos.y) <= (floorThickness)) {
-            debug.log("you just died");
+    //     }
+    // })
 
-            window.deathPixel.textContent = "dead";
-            go("title_screen");
-        }
+    bird.onCollide(() => {
+        debug.log("you just died");
+
+        window.deathPixel.textContent = "dead";
+        go("title_screen");
     })
 
 
     onClick(() => addKaboom(mousePos()));
 
     onButtonDown("flyUp", () => {
-        bird.vel.y -= dt() * UP_FORCE;
+        bird.applyImpulse(vec2(0, MAX_UP_FORCE * Math.random()));
     })
 
     onButtonDown("flyDown", () => {
-        bird.vel.y += dt() * DOWN_FORCE;
+        bird.applyImpulse(vec2(0, MAX_DOWN_FORCE * Math.random()));
     })
 })
 
@@ -169,7 +174,7 @@ scene("title_screen", () => {
 
 scene("instructions", () => {
     const instructionsMenu = add([
-        rect(400, 400, { radius: 10 }),
+        rect(400, 300, { radius: 10 }),
         color(255, 255, 255),
         outline(4),
         anchor("center"),
@@ -184,10 +189,10 @@ scene("instructions", () => {
     ]);
 
     title.add([
-        text("Words and blabber", { size: 23 }),
+        text("w/up/left-click => hold to increase upwards velocity\n\ns/down/right-click => hold to increase downwards velocity.\n\nTry not to get hit!!", { size: 19, width: instructionsMenu.width - instructionsMenu.width / 20 }),
         color(BLACK),
         anchor("top"),
-        pos(0, title.height * 1.5),
+        pos(instructionsMenu.width / 20, title.height * 1.5),
     ])
 
     instructionsMenu.add([
@@ -198,7 +203,7 @@ scene("instructions", () => {
         {
             add() {
                 this.btnWidth = instructionsMenu.width - 64;
-                this.btnHeight = this.height + 24;
+                this.btnHeight = this.height + 20;
 
                 this.use(
                     area({
