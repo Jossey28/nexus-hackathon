@@ -21,7 +21,8 @@
   frogEl.style.transformOrigin = "top left";
   frogEl.style.imageRendering = "pixelated";
   frogEl.style.pointerEvents = "none";
-  frogEl.style.zIndex = "9999";
+  frogEl.style.zIndex = "1";
+
   document.body.appendChild(frogEl);
 
   document.addEventListener("mousemove", (e) => {
