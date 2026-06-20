@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="/favicon.png" />
     <title>bird</title>
     <link rel="stylesheet" href="/index.css">
@@ -9,8 +10,18 @@
 
 <body style="overflow:hidden">
     <script src="src/main.js" type="module"></script>
-    <div class="container">
+    <div id="game-container">
+    <div class="box">
+        <div class="title-bar">
+        <span>Game</span>
+        <div class="title-btns">
+            <span class="btn">_</span>
+            <span class="btn">□</span>
+            <span class="btn">X</span>
+        </div>
+        </div>
         <canvas id="kaplay-game"></canvas>
+    </div>
     </div>
     <script src="/src/neko.js"></script>
 </body>
