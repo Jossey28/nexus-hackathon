@@ -12,11 +12,11 @@ html, body {
 }
 
 .box {
-  border: 2px solid #000;
-  border-radius: 6px;
+  border: 2px solid #5072D6;
+  border-radius: 4px;
   overflow: hidden;
   width: fit-content;
-  margin: auto;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
 }
 
 .title-bar {
@@ -24,33 +24,31 @@ html, body {
   align-items: center;
   justify-content: space-between;
   background: #aaccd6;
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid #5072D6;
   padding: 4px 8px;
   font-family: monospace;
   font-weight: bold;
+  color: #5072D6;
 }
 
 .title-btns {
   display: flex;
-  gap: 3px;
+  gap: 4px;
 }
 
 .btn {
   width: 18px;
   height: 18px;
-  border: 1px solid #000;
+  border: 1px solid #5072D6;
+  border-radius: 3px;
+  background: #f9eff9;
   text-align: center;
   font-size: 11px;
   line-height: 16px;
   font-family: monospace;
+  color: #5072D6;
   cursor: default;
   user-select: none;
-}
-
-#kaplay-game {
-  position: relative;
-  z-index: 2;
-  display: block;
 }
 
 #game-container {
@@ -58,4 +56,10 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#kaplay-game {
+  position: relative;
+  z-index: 2;
+  display: block;
 }
