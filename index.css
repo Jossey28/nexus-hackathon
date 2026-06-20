@@ -1,0 +1,7 @@
+* {
+  cursor: url('/public/cursor/green_kitty.png'), auto;
+}
+
+a, button, .clickable {
+  cursor: url('/public/cursor/green_paw.png'), pointer;
+}
