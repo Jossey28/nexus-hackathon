@@ -3,8 +3,8 @@ import kaplay from "kaplay";
 
 
 const k = kaplay({
-    // width: 700,
-    // height: 700,
+    width: 700,
+    height: 700,
     background: "#AACCD6",
     canvas: document.querySelector("#kaplay-game")
 });
