@@ -1,26 +1,31 @@
 import kaplay from "kaplay";
-// import "kaplay/global"; // uncomment if you want to use without the k. prefix
+import "kaplay/global";
 
 
-const k = kaplay({
+kaplay({
     // width: 700,
     // height: 700,
     background: "#AACCD6",
     canvas: document.querySelector("#kaplay-game")
 });
 
-k.loadRoot("./"); // A good idea for Itch.io publishing later
+loadRoot("./"); // A good idea for Itch.io publishing later
 
-k.loadSprite("bird", "sprites/bird.png");
+loadSprite("bird", "sprites/bird.png");
 
-const bird = add([
-    sprite("bird"),
-    scale(0.25),
+function createBird() {
+    const bird = [
+        sprite("bird"),
+        // rect(50, 50),
+        scale(0.25),
 
-    anchor("center"),
-    pos(center()),
-    rotate(90),
-])
+        anchor("center"),
+        pos(center()),
+        rotate(90),
+    ];
+
+    return bird
+}
 
 function createBorders() {
     const floorThickness = 50;
@@ -41,18 +46,16 @@ function createBorders() {
     return [ceiling, ground]
 }
 
-
-
-
 scene("game_loop", () => {
     const [ceiling, ground] = createBorders();
+    const bird = createBird();
 
     add(ceiling);
     add(ground);
+
+    add(bird);
+
+    onClick(() => addKaboom(mousePos()));
 })
 
-
-
-// k.onClick(() => k.addKaboom(k.mousePos()));
-
-k.go("game_loop")
+go("game_loop")
