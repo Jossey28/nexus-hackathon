@@ -5,3 +5,11 @@
 a, button, .clickable {
   cursor: url('/public/cursor/green_paw.png'), pointer;
 }
+
+.container {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
