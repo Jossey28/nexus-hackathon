@@ -11,55 +11,70 @@ html, body {
   margin: 0;
 }
 
+#game-container {
+  position: relative;
+  min-height: 100vh;
+}
+
 .box {
-  border: 2px solid #5072D6;
-  border-radius: 4px;
-  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #4932C9;
+  background: #E2E2E2;
+  padding: 4px;
+  box-shadow: 4px 4px rgba(80, 20, 255, 0.2);
   width: fit-content;
-  box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+}
+
+.box:hover {
+  background: #94F1E1;
+}
+
+.box:hover .title-bar {
+  background: #EDD0EE;
 }
 
 .title-bar {
+  border: 2px solid #4932C9;
+  background: #E2E2E2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #aaccd6;
-  border-bottom: 2px solid #5072D6;
-  padding: 4px 8px;
+  padding: 2px 6px;
   font-family: monospace;
   font-weight: bold;
-  color: #5072D6;
+  font-size: 21px;
+  color: #4932C9;
+  height: 22px;
+  position: relative;
+  z-index: 2;
 }
 
 .title-btns {
   display: flex;
-  gap: 4px;
+  gap: 3px;
 }
 
 .btn {
-  width: 18px;
-  height: 18px;
-  border: 1px solid #5072D6;
-  border-radius: 3px;
-  background: #f9eff9;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #4932C9;
+  background: #F8E1FB;
   text-align: center;
-  font-size: 11px;
-  line-height: 16px;
+  font-size: 10px;
+  line-height: 14px;
   font-family: monospace;
-  color: #5072D6;
+  color: #4932C9;
   cursor: default;
   user-select: none;
 }
 
-#game-container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 #kaplay-game {
+  display: block;
+  border: 2px solid #4932C9;
+  margin-top: 4px;
   position: relative;
   z-index: 2;
-  display: block;
 }
