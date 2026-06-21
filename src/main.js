@@ -43,6 +43,8 @@ window.deathPixel = document.createElement("div");
 window.deathPixel.textContent = "alive";
 
 scene("game_loop", () => {
+    window.deathPixel.textContent = "alive";
+    
     const game = add([
         timer(),
         layer("game")
