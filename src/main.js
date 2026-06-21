@@ -9,6 +9,10 @@ const MAX_DOWN_FORCE = 10;
 const WINDOW_WIDTH = 850;
 const WINDOW_HEIGHT = 700;
 
+const nameField = document.getElementById("name-input");
+const gameTitle = document.getElementById("game-title");
+
+
 let highestScore = 0;
 
 const k = kaplay({
@@ -29,6 +33,14 @@ const k = kaplay({
         "speedUp": {
             keyboard: ["shift"],
         }
+    }
+});
+
+nameField.addEventListener("keydown", function (event) {
+    console.log("I hope this works");
+    if (event.key == "Enter") {
+        gameTitle.textContent = `Greg's Game (${nameField.value} playing)`;
+        console.log("Updated title:", gameTitle);
     }
 });
 
