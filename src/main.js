@@ -5,10 +5,16 @@ const GRAVITY = 0;
 
 const MAX_UP_FORCE = -10;
 const MAX_DOWN_FORCE = 10;
+const MAX_PUSHBACK_FORCE = -20;
+
+const WINDOW_WIDTH = 700;
+const WINDOW_HEIGHT = 700;
+
+var airSpeed = 700;
 
 const k = kaplay({
-    width: 700,
-    height: 700,
+    width: WINDOW_WIDTH,
+    height: WINDOW_HEIGHT,
     background: "#AACCD6",
     canvas: document.querySelector("#kaplay-game"),
 
@@ -18,8 +24,11 @@ const k = kaplay({
             mouse: ["left"]
         },
         "flyDown": {
-            keyboard: ["down", "d"],
+            keyboard: ["down", "s"],
             mouse: ["right"]
+        },
+        "speedUp": {
+            keyboard: ["shift"],
         }
     }
 });
@@ -34,26 +43,36 @@ window.deathPixel = document.createElement("div");
 window.deathPixel.textContent = "alive";
 
 scene("game_loop", () => {
+    const game = add([
+        timer(),
+        layer("game")
+    ]);
+
+
     const floorThickness = 25;
     const floorColor = Color.fromHex("#8B5E3C")
 
-    const ceiling = add([
+    const ceiling = game.add([
         rect(width(), floorThickness),
         pos(0, 0),
         color(Color.fromHex("#8B5E3C")),
         area({ isSensor: true }),
+
+        "instant-death",
     ]);
 
-    const ground = add([
+    const ground = game.add([
         rect(width(), floorThickness),
         pos(0, height() - floorThickness),
         color(floorColor),
         area(),
         area({ isSensor: true }),
+
+        "instant-death"
     ]);
 
 
-    const stalactite = add([
+    const stalactite = game.add([
         rotate(180),
         pos(0, (floorThickness - 10)),
 
@@ -76,9 +95,11 @@ scene("game_loop", () => {
         }),
 
         color(RED),
+
+        "pushback"
     ])
 
-    const bird = add([
+    const bird = game.add([
         sprite("bird"),
         scale(0.25),
 
@@ -90,19 +111,45 @@ scene("game_loop", () => {
         body(),
     ]);
 
-    // bird.onUpdate(() => {
-    //     if ((bird.pos.y) >= (height() - floorThickness) || (bird.pos.y) <= (floorThickness)) {
+    function spawnAirEffect() {
+        const makeAirEffect = (percentThrough, long, thick) => [
+            pos(width(), Math.floor(Math.random() * (675 - ground.height + 1)) + ground.height),
+            rect(long, thick),
+            color(255, 255, 255),
+            outline(4),
+            area({ isSensor: true }),
+            move(LEFT, airSpeed),
+            offscreen({ destroy: true }),
 
-    //     }
-    // })
+            "harmless",
+        ];
 
-    bird.onCollide(() => {
+        game.add(makeAirEffect(10, 30, 5));
+    }
+
+    bird.onUpdate(() => {
+        if (bird.pos.x > (800) || bird.pos.x < 10) {
+            go("title_screen")
+        };
+
+        if (bird.pos.x > 300 && bird.pos.x < 400) {
+            bird.applyImpulse(vec2(-10, 0));
+        }
+    })
+
+    bird.onCollide("instant-death", () => {
         debug.log("you just died");
 
         window.deathPixel.textContent = "dead";
         go("title_screen");
     })
 
+    bird.onCollide("pushback", () => {
+        debug.log("Not dead just yet")
+
+        bird.applyImpulse(vec2(MAX_PUSHBACK_FORCE * Math.random(), (MAX_DOWN_FORCE * 0.3) * Math.random()));
+        addKaboom(bird.pos);
+    })
 
     onClick(() => addKaboom(mousePos()));
 
@@ -113,6 +160,27 @@ scene("game_loop", () => {
     onButtonDown("flyDown", () => {
         bird.applyImpulse(vec2(0, MAX_DOWN_FORCE * Math.random()));
     })
+
+    const oldAirSpeed = airSpeed;
+    onButtonDown("speedUp", () => {
+        airSpeed = oldAirSpeed * 2.5;
+        wait(4, () => {
+            airSpeed = oldAirSpeed;
+        })
+
+        if (bird.pos.x > 600) {
+            bird.vel.x = 0;
+            return;
+        }
+
+        bird.applyImpulse(vec2(5, 0));
+        // bird.addForce(vec2(5, 0));
+        wait(2, () => {
+            bird.vel.x = 0;
+        });
+    })
+
+    game.loop(1, spawnAirEffect)
 })
 
 scene("title_screen", () => {
