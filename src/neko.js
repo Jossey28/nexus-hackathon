@@ -13,6 +13,8 @@
   const clownSheet = "/sprites/frog-fly.png";
   const croakRows = [0, 1, 2]; // replace with the actual row numbers (0-5) containing your croak frames
 
+  const judgeSheet = "/sprites/frog-judge.png";
+
   const costumes = [
     { idle: "/sprites/frog-idle.png", jump: "/sprites/frog-jump.png", hurt: "/sprites/frog-hurt.png" },
   ];
@@ -28,7 +30,14 @@
   let frozenUntil = 0;
   let croakFrameCount = 0;
   let lastCroakTick = 0;
-  const croakSpeed = 300; // ms per croak frame, higher = slower
+  const croakSpeed = 300;
+
+  let lastDeathState = "alive";
+  let judging = false;
+  let judgingFrameCount = 0;
+  let lastJudgingTick = 0;
+  const judgingSpeed = 300;
+  const judgingFrames = 3;
 
   frogEl.style.position = "fixed";
   frogEl.style.width = `${frameW}px`;
@@ -55,6 +64,32 @@
   flyEl.style.left = "200px";
   flyEl.style.top = "200px";
   document.body.appendChild(flyEl);
+
+  function isInsideBox(x, y, padding = 0) {
+    if (!boxEl) return false;
+    const rect = boxEl.getBoundingClientRect();
+    return (
+      x > rect.left - padding &&
+      x < rect.right + padding &&
+      y > rect.top - padding &&
+      y < rect.bottom + padding
+    );
+  }
+
+  let flyTargetX = 100, flyTargetY = 100;
+  let lastFlyTargetTime = 0;
+
+  function pickNewFlyTarget() {
+    let x, y, tries = 0;
+    do {
+      x = Math.random() * (window.innerWidth - 60) + 30;
+      y = Math.random() * (window.innerHeight - 60) + 30;
+      tries++;
+    } while (isInsideBox(x, y, 30) && tries < 20);
+    flyTargetX = x;
+    flyTargetY = y;
+  }
+  pickNewFlyTarget();
 
   document.addEventListener("mousemove", (e) => {
     mouseX = e.clientX;
@@ -100,17 +135,6 @@
     SE: "SW", SW: "SE",
   };
 
-  function isInsideBox(x, y, padding = 0) {
-    if (!boxEl) return false;
-    const rect = boxEl.getBoundingClientRect();
-    return (
-      x > rect.left - padding &&
-      x < rect.right + padding &&
-      y > rect.top - padding &&
-      y < rect.bottom + padding
-    );
-  }
-
   function loop(timestamp) {
     if (timestamp - lastTime > 120) {
       lastTime = timestamp;
@@ -119,15 +143,56 @@
       const flapFrame = frame % 2;
       flyEl.style.backgroundPosition = `0px -${flapFrame * flyFrameH}px`;
 
-      const time = timestamp / 1000;
-     const candidateX = window.innerWidth * 0.15 + Math.sin(time * 0.5) * 100;
-     const candidateY = window.innerHeight * 0.15 + Math.cos(time * 0.7) * 100;
-
-      if (!isInsideBox(candidateX, candidateY, 20)) {
-        flyEl.style.left = `${candidateX}px`;
-        flyEl.style.top = `${candidateY}px`;
+      if (timestamp - lastFlyTargetTime > 3000) {
+        lastFlyTargetTime = timestamp;
+        pickNewFlyTarget();
       }
 
+      const currentFlyX = parseFloat(flyEl.style.left) || flyTargetX;
+      const currentFlyY = parseFloat(flyEl.style.top) || flyTargetY;
+      const flyDx = flyTargetX - currentFlyX;
+      const flyDy = flyTargetY - currentFlyY;
+      const flyDist = Math.sqrt(flyDx * flyDx + flyDy * flyDy);
+
+      if (flyDist > 2) {
+        const flySpeed = 3;
+        const nextFlyX = currentFlyX + (flyDx / flyDist) * flySpeed;
+        const nextFlyY = currentFlyY + (flyDy / flyDist) * flySpeed;
+
+        if (!isInsideBox(nextFlyX, nextFlyY, 20)) {
+          flyEl.style.left = `${nextFlyX}px`;
+          flyEl.style.top = `${nextFlyY}px`;
+        } else {
+          pickNewFlyTarget();
+        }
+      }
+
+      // --- death pixel / judging detection (edge-triggered) ---
+      const currentDeathState = window.deathPixel ? window.deathPixel.textContent : "alive";
+      if (currentDeathState === "dead" && lastDeathState === "alive") {
+        judging = true;
+        judgingFrameCount = 0;
+        lastJudgingTick = timestamp;
+      }
+      lastDeathState = currentDeathState;
+
+      if (judging) {
+        if (timestamp - lastJudgingTick > judgingSpeed) {
+          lastJudgingTick = timestamp;
+          judgingFrameCount++;
+        }
+        if (judgingFrameCount >= judgingFrames * 3) {
+          judging = false;
+        } else {
+          const jf = judgingFrameCount % judgingFrames;
+          frogEl.style.backgroundImage = `url('${judgeSheet}')`;
+          frogEl.style.backgroundPosition = `-${jf * frameW}px 0px`;
+          requestAnimationFrame(loop);
+          return;
+        }
+      }
+
+      // --- fly touch / croak detection ---
       const frogRect = frogEl.getBoundingClientRect();
       const flyRect = flyEl.getBoundingClientRect();
       const touching = !(
@@ -161,6 +226,7 @@
         }
       }
 
+      // --- normal chase / idle / hurt ---
       if (!isHeld) {
         const dx = mouseX - posX;
         const dy = mouseY - posY;
@@ -177,18 +243,18 @@
           let nextX = posX + (dx / dist) * speed;
           let nextY = posY + (dy / dist) * speed;
 
-          if (isInsideBox(nextX, nextY, 20)) {
+          if (isInsideBox(nextX, nextY, 50)) {
             const rect = boxEl.getBoundingClientRect();
-            const insideVertically = posY > rect.top - 20 && posY < rect.bottom + 20;
+            const insideVertically = posY > rect.top - 50 && posY < rect.bottom + 50;
 
             if (insideVertically) {
-              const distToTop = Math.abs(posY - (rect.top - 20));
-              const distToBottom = Math.abs(posY - (rect.bottom + 20));
+              const distToTop = Math.abs(posY - (rect.top - 50));
+              const distToBottom = Math.abs(posY - (rect.bottom + 50));
               const vertDir = distToTop < distToBottom ? -1 : 1;
               posY += vertDir * speed;
 
               const sideStep = dx > 0 ? speed : -speed;
-              if (!isInsideBox(posX + sideStep, posY, 20)) {
+              if (!isInsideBox(posX + sideStep, posY, 50)) {
                 posX += sideStep;
               }
             } else {
