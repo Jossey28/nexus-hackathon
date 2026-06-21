@@ -3,9 +3,9 @@ import "kaplay/global";
 
 const GRAVITY = 0;
 
-const MAX_UP_FORCE = -10;
+const MAX_UP_FORCE = 10;
 const MAX_DOWN_FORCE = 10;
-const MAX_PUSHBACK_FORCE = -20;
+const MAX_PUSHBACK_FORCE = 20;
 
 const WINDOW_WIDTH = 700;
 const WINDOW_HEIGHT = 700;
@@ -149,7 +149,7 @@ scene("game_loop", () => {
     bird.onCollide("pushback", () => {
         debug.log("Not dead just yet")
 
-        bird.applyImpulse(vec2(MAX_PUSHBACK_FORCE * Math.random(), (MAX_DOWN_FORCE * 0.3) * Math.random()));
+        bird.applyImpulse(vec2(-MAX_PUSHBACK_FORCE * Math.random(), (-MAX_DOWN_FORCE * 0.3) * Math.random()));
         addKaboom(bird.pos);
     })
 
@@ -160,7 +160,7 @@ scene("game_loop", () => {
     })
 
     onButtonDown("flyDown", () => {
-        bird.applyImpulse(vec2(0, MAX_DOWN_FORCE * Math.random()));
+        bird.applyImpulse(vec2(0, -MAX_DOWN_FORCE * Math.random()));
     })
 
     const oldAirSpeed = airSpeed;
