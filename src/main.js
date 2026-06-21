@@ -5,12 +5,11 @@ const GRAVITY = 0;
 
 const MAX_UP_FORCE = 10;
 const MAX_DOWN_FORCE = 10;
-const MAX_PUSHBACK_FORCE = 20;
 
 const WINDOW_WIDTH = 700;
 const WINDOW_HEIGHT = 700;
 
-var airSpeed = 700;
+let highestScore = 0;
 
 const k = kaplay({
     width: WINDOW_WIDTH,
@@ -43,16 +42,46 @@ window.deathPixel = document.createElement("div");
 window.deathPixel.textContent = "alive";
 
 scene("game_loop", () => {
+    let airSpeed = 700;
+
     window.deathPixel.textContent = "alive";
+
+    const floorThickness = 25;
+    const floorColor = Color.fromHex("#8B5E3C")
 
     const game = add([
         timer(),
         layer("game")
     ]);
 
+    let score = 0;
 
-    const floorThickness = 25;
-    const floorColor = Color.fromHex("#8B5E3C")
+    const scoreLabel = game.add([
+        text(`${score}`, { size: 45 }),
+        pos(width() - 50, floorThickness),
+        fixed(),
+        z(100),
+    ]);
+
+    scoreLabel.text += " Dodged"
+
+
+    const scoreChecker = game.add([
+        anchor("center"),
+        rect(width() / 20, height()),
+        pos(width() / 10, 350),
+        color(Color.fromHex("#8B5E3C")),
+        opacity(0),
+        area({ isSensor: true }),
+
+        "scoring"
+    ]);
+
+    function addScore() {
+        score++;
+        scoreLabel.text = `${score} Dodged`;
+    }
+
 
     const ceiling = game.add([
         rect(width(), floorThickness),
@@ -73,34 +102,6 @@ scene("game_loop", () => {
         "instant-death"
     ]);
 
-
-    const stalactite = game.add([
-        rotate(180),
-        pos(0, (floorThickness - 10)),
-
-        polygon(
-            [
-                vec2(-15, 10),
-                vec2(15, 10),
-                vec2(0, -10),
-            ]
-        ),
-
-        area({
-            shape: new Polygon(
-                [
-                    vec2(-15, 10),
-                    vec2(15, 10),
-                    vec2(0, -10),
-                ]
-            )
-        }),
-
-        color(RED),
-
-        "pushback"
-    ])
-
     const bird = game.add([
         sprite("bird"),
         scale(0.25),
@@ -111,12 +112,15 @@ scene("game_loop", () => {
         pos(center()),
         area(),
         body(),
+        animate(),
+
+        "player",
     ]);
 
     function spawnAirEffect() {
-        const makeAirEffect = (percentThrough, long, thick) => [
+        const makeAirEffect = game.add([
             pos(width(), Math.floor(Math.random() * (675 - ground.height + 1)) + ground.height),
-            rect(long, thick),
+            rect(30, 5),
             color(255, 255, 255),
             outline(4),
             area({ isSensor: true }),
@@ -124,36 +128,39 @@ scene("game_loop", () => {
             offscreen({ destroy: true }),
 
             "instant-death",
-        ];
+        ]);
 
-        game.add(makeAirEffect(10, 30, 5));
+        makeAirEffect.onCollide("scoring", () => {
+            addScore();
+        })
     }
 
     bird.onUpdate(() => {
         if (bird.pos.x > (800) || bird.pos.x < 10) {
+            window.deathPixel.textContent = "dead";
             go("title_screen")
         };
 
-        if (bird.pos.x > 300 && bird.pos.x < 400) {
-            bird.applyImpulse(vec2(-10, 0));
-        }
+        airSpeed = airSpeed + (score * 5);
+        bird.applyImpulse(vec2(-1 + (score * -0.1), 0));
     })
 
     bird.onCollide("instant-death", () => {
         debug.log("you just died");
 
-        window.deathPixel.textContent = "dead";
-        go("title_screen");
-    })
-
-    bird.onCollide("pushback", () => {
-        debug.log("Not dead just yet")
-
-        bird.applyImpulse(vec2(-MAX_PUSHBACK_FORCE * Math.random(), (-MAX_DOWN_FORCE * 0.3) * Math.random()));
         addKaboom(bird.pos);
-    })
+        window.deathPixel.textContent = "dead";
+        // bird.pos += vec2(dt(), dt())
 
-    onClick(() => addKaboom(mousePos()));
+        bird.animate("angle", [90, 450], {
+            duration: 1,
+            direction: "forward",
+        });
+
+        wait(2, () => {
+            go("title_screen");
+        })
+    })
 
     onButtonDown("flyUp", () => {
         bird.applyImpulse(vec2(0, -MAX_UP_FORCE * Math.random()));
@@ -240,6 +247,9 @@ scene("title_screen", () => {
         ])
     );
 
+    // titleMenu.add([
+    //     text(`highest score: ${highestScore}`)
+    // ])
 })
 
 scene("instructions", () => {
