@@ -6,8 +6,43 @@
 <title>bird</title>
 <link rel="stylesheet" href="/index.css">
 </head>
-<body style="overflow:hidden">
+<body>
 <script src="src/main.js" type="module"></script>
+
+<div class="content-grid">
+  <h1 class="page-title">Who the heck are you? <span class="page-subtitle">(About)</span></h1>
+
+  <div class="box" style="width: 280px;">
+    <div class="title-bar">
+      <span>Profile</span>
+      <div class="title-btns">
+        <span class="btn">_</span>
+        <span class="btn">□</span>
+        <span class="btn">X</span>
+      </div>
+    </div>
+    <div style="padding: 20px; text-align: center;">
+      <div class="greg-tophat"></div>
+      <div class="text-box">
+        <p>name ★ age ★ date</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="box" style="flex: 1;">
+    <div class="title-bar">
+      <span>About</span>
+      <div class="title-btns">
+        <span class="btn">_</span>
+        <span class="btn">□</span>
+        <span class="btn">X</span>
+      </div>
+    </div>
+    <div style="padding: 20px;">
+      <p>greg greg greg.</p>
+    </div>
+  </div>
+</div>
 
 <div id="game-container">
   <div id="game-box" class="box">
@@ -20,20 +55,6 @@
       </div>
     </div>
     <canvas id="kaplay-game"></canvas>
-  </div>
-</div>
-
-<div id="context-box" class="box" style="width: 400px; top: 100px; left: 100px;">
-  <div class="title-bar">
-    <span>Context</span>
-    <div class="title-btns">
-      <span class="btn">_</span>
-      <span class="btn">□</span>
-      <span class="btn">X</span>
-    </div>
-  </div>
-  <div style="padding: 12px;">
-    <p>greg greg greg.</p>
   </div>
 </div>
 

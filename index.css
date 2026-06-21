@@ -9,6 +9,13 @@ a, button, .clickable {
 html, body {
   height: 100%;
   margin: 0;
+} 
+
+body {
+  background-image: url('/img/beach.webp');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 .box {
@@ -41,6 +48,8 @@ html, body {
   height: 22px;
   position: relative;
   z-index: 2;
+  user-select: none;
+  cursor: move;
 }
 
 .title-btns {
@@ -62,7 +71,36 @@ html, body {
   user-select: none;
 }
 
+.content-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  max-width: 900px;
+  margin: 40px auto;
+  align-items: flex-start;
+}
 
+.page-title {
+  width: 100%;
+  font-family: monospace;
+  font-size: 48px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 0 #4932C9, 4px 4px 0 rgba(0,0,0,0.3);
+  margin: 0 0 10px 0;
+}
+
+.page-subtitle {
+  font-size: 24px;
+  color: #4932C9;
+  text-shadow: none;
+}
+
+#game-container {
+  display: flex;
+  justify-content: center;
+  margin: 100px 0 200px 0;
+}
 
 #kaplay-game {
   display: block;
@@ -70,38 +108,30 @@ html, body {
   margin-top: 4px;
 }
 
-.title-bar {
-  border: 2px solid #4932C9;
-  background: #E2E2E2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 2px 6px;
-  font-family: monospace;
-  font-weight: bold;
-  font-size: 21px;
-  color: #4932C9;
-  height: 22px;
-  position: relative;
-  z-index: 2;
-  user-select: none;
-  cursor: move;
+.greg-tophat {
+  width: 32px;
+  height: 32px;
+  margin: 0 auto;
+  background-image: url('/sprites/frog-idle.png');
+  background-position: 0px 0px;
+  image-rendering: pixelated;
+  transform: scale(4);
+  transform-origin: center;
+  animation: idle-cycle 0.6s steps(5) infinite;
 }
 
-#game-container {
-  position: relative;
-  min-height: 100vh;
+@keyframes idle-cycle {
+  from { background-position: 0px 0px; }
+  to { background-position: -160px 0px; }
 }
 
-#game-box {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5;
+.text-box {
+  margin-top: 24px;
+  border: 2px solid transparent;
+  padding: 6px;
+  transition: border-color 0.2s ease;
 }
 
-#context-box {
-  position: absolute;
-  z-index: 2;
+.text-box:hover {
+  border-color: #4932C9;
 }

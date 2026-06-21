@@ -4,14 +4,14 @@
   const frogEl = document.createElement("div");
   const frameW = 32;
   const frameH = 32;
-  const scale = 3;
+  const scale = 3.5;
   const idleFrames = 5;
   const jumpFrames = 8;
   const directionRows = ["S", "SW", "W", "NW", "N", "NE", "E", "SE"];
   const boxEl = document.querySelector(".box");
 
   const clownSheet = "/sprites/frog-fly.png";
-  const croakRows = [0, 1, 2]; // replace with the actual row numbers (0-5) containing your croak frames
+  const croakRows = [0, 1, 2];
 
   const judgeSheet = "/sprites/frog-judge.png";
 
@@ -45,21 +45,21 @@
   frogEl.style.transform = `scale(${scale})`;
   frogEl.style.transformOrigin = "top left";
   frogEl.style.imageRendering = "pixelated";
-  frogEl.style.zIndex = "0";
+  frogEl.style.zIndex = "5";
   frogEl.style.cursor = "grab";
   document.body.appendChild(frogEl);
 
   const flyEl = document.createElement("div");
   const flyFrameW = 32;
   const flyFrameH = 32;
-  const flyScale = 1.5;
+  const flyScale = 3;
   flyEl.style.position = "fixed";
   flyEl.style.width = `${flyFrameW}px`;
   flyEl.style.height = `${flyFrameH}px`;
   flyEl.style.backgroundImage = "url('/sprites/fly.png')";
   flyEl.style.transform = `scale(${flyScale})`;
   flyEl.style.transformOrigin = "top left";
-  flyEl.style.zIndex = "0";
+  flyEl.style.zIndex = "5";
   flyEl.style.imageRendering = "pixelated";
   flyEl.style.left = "200px";
   flyEl.style.top = "200px";
@@ -74,6 +74,18 @@
       y > rect.top - padding &&
       y < rect.bottom + padding
     );
+  }
+
+  function getShrunkRect(el, shrinkPercent = 0.3) {
+    const rect = el.getBoundingClientRect();
+    const shrinkX = rect.width * shrinkPercent;
+    const shrinkY = rect.height * shrinkPercent;
+    return {
+      left: rect.left + shrinkX,
+      right: rect.right - shrinkX,
+      top: rect.top + shrinkY,
+      bottom: rect.bottom - shrinkY,
+    };
   }
 
   let flyTargetX = 100, flyTargetY = 100;
@@ -192,9 +204,9 @@
         }
       }
 
-      // --- fly touch / croak detection ---
-      const frogRect = frogEl.getBoundingClientRect();
-      const flyRect = flyEl.getBoundingClientRect();
+      // --- fly touch / croak detection (using shrunk hitboxes) ---
+      const frogRect = getShrunkRect(frogEl, 0.3);
+      const flyRect = getShrunkRect(flyEl, 0.3);
       const touching = !(
         frogRect.right < flyRect.left ||
         frogRect.left > flyRect.right ||

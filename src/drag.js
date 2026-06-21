@@ -1,44 +1,39 @@
-function makeBoxDraggable(boxId) {
-  const box = document.getElementById(boxId);
-  if (!box) {
-    console.error(`Drag setup failed: no element with id="${boxId}"`);
-    return;
-  }
-  const titleBar = box.querySelector(".title-bar");
-  if (!titleBar) {
-    console.error(`Drag setup failed: no .title-bar inside #${boxId}`);
-    return;
-  }
+function makeDraggable() {
+  const boxes = document.querySelectorAll(".box");
 
-  let isDragging = false;
-  let offsetX = 0;
-  let offsetY = 0;
+  boxes.forEach((box) => {
+    const titleBar = box.querySelector(".title-bar");
+    if (!titleBar) return;
 
-  titleBar.addEventListener("mousedown", (e) => {
-    e.preventDefault();
-    isDragging = true;
-    box.style.zIndex = "20";
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
 
-    const rect = box.getBoundingClientRect();
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
+    titleBar.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      isDragging = true;
+      box.style.zIndex = "20";
 
-    box.style.position = "absolute";
-    box.style.left = `${rect.left}px`;
-    box.style.top = `${rect.top}px`;
-    box.style.transform = "none";
-  });
+      const rect = box.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
 
-  document.addEventListener("mousemove", (e) => {
-    if (!isDragging) return;
-    box.style.left = `${e.clientX - offsetX}px`;
-    box.style.top = `${e.clientY - offsetY}px`;
-  });
+      box.style.position = "absolute";
+      box.style.left = `${rect.left}px`;
+      box.style.top = `${rect.top}px`;
+      box.style.transform = "none";
+    });
 
-  document.addEventListener("mouseup", () => {
-    isDragging = false;
+    document.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      box.style.left = `${e.clientX - offsetX}px`;
+      box.style.top = `${e.clientY - offsetY}px`;
+    });
+
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
   });
 }
 
-makeBoxDraggable("game-box");
-makeBoxDraggable("context-box");
+makeDraggable();
