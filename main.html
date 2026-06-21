@@ -1,97 +1,94 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <title>bird</title>
-    <link rel="stylesheet" href="/index.css">
-    <script src="https://iframe.chat/scripts/main.min.js"></script>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>bird</title>
+<link rel="stylesheet" href="/index.css">
+<script src="https://iframe.chat/scripts/main.min.js"></script>
 </head>
-
 <body>
-    <script src="src/main.js" type="module"></script>
+<script src="src/main.js" type="module"></script>
 
-    <div class="content-grid">
-        <h1 class="page-title">Greg 🐸 <span class="page-subtitle">The Frog</span></h1>
+<div class="column">
 
-        <div class="box" style="width: 280px;">
-            <div class="title-bar">
-                <span>Profile</span>
-                <div class="title-btns">
-                    <span class="btn">_</span>
-                    <span class="btn">□</span>
-                    <span class="btn">X</span>
-                </div>
-            </div>
-            <div style="padding: 20px; text-align: center;">
-                <div class="greg-tophat"></div>
-                <div class="text-box">
-                    <p>Greg ★ 400 yrs ★ 🐸</p>
-                </div>
-            </div>
+  <div class="content-grid">
+    <h1 class="page-title">Greg 🐸 <span class="page-subtitle">The Frog</span></h1>
+
+    <div class="box" style="width: 280px;">
+      <div class="title-bar">
+        <span>Profile</span>
+        <div class="title-btns">
+          <span class="btn">_</span>
+          <span class="btn">□</span>
+          <span class="btn">X</span>
         </div>
-
-        <div class="box" style="flex: 1;">
-            <div class="title-bar">
-                <span>About</span>
-                <div class="title-btns">
-                    <span class="btn">_</span>
-                    <span class="btn">□</span>
-                    <span class="btn">X</span>
-                </div>
-            </div>
-            <div style="padding: 20px;">
-                <p>Greg is a baller frog. Rich beyond reason
-                    that's why he's got the top hat, the beach, the whole vibe.
-                    Nobody knows how he got the money. Nobody's asking. He spends his days watching you play his fav game,
-                    because He finds it funny..</p>
-            </div>
+      </div>
+      <div style="padding: 20px; text-align: center;">
+        <div class="greg-tophat"></div>
+        <div class="text-box">
+          <p>Greg ★ 400 yrs ★ 🐸</p>
         </div>
+      </div>
     </div>
 
-    <div id="game-container">
-        <div class="box" style="width: 350px;">
-            <div class="title-bar">
-                <span>chat</span>
-                <div class="title-btns">
-                    <span class="btn">_</span>
-                    <span class="btn">□</span>
-                    <span class="btn">X</span>
-                </div>
-            </div>
-            <div style="padding: 0; height: 400px;">
-                <iframe src="https://iframe.chat/embed?chat=17462978" id="chattable"
-                    style="width: 100%; height: 100%; border: none; display: block; z-index: 2;"></iframe>
-            </div>
+    <div class="box" style="width: 400px; height: 300px;">
+      <div class="title-bar">
+        <span>About</span>
+        <div class="title-btns">
+          <span class="btn">_</span>
+          <span class="btn">□</span>
+          <span class="btn">X</span>
         </div>
+      </div>
+      <div style="padding: 20px; height: 260px; overflow-y: auto; font-size: 18px;">
+        <p>Greg is a baller frog. Rich beyond reason that's why he's got the top hat, the beach, the whole vibe. Nobody knows how he got the money. Nobody's asking. He spends his days watching you play his fav game, because He finds it funny..</p>
+      </div>
+    </div>
+  </div>
 
-        <div id="game-box" class="box">
-            <div class="title-bar">
-                <span id="game-title">Greg's Game</span>
-                <div class="title-btns">
-                    <span class="btn">_</span>
-                    <span class="btn">□</span>
-                    <span class="btn">X</span>
-                </div>
-            </div>
-            <canvas id="kaplay-game"></canvas>
-            <div class="title-bar">
-                <span>Name (enter to save)</span>
-                <input type="text" id="name-input" name="name-input">
-            </div>
+  <div id="game-container">
+    <div class="box" style="width: 350px;">
+      <div class="title-bar">
+        <span>chat</span>
+        <div class="title-btns">
+          <span class="btn">_</span>
+          <span class="btn">□</span>
+          <span class="btn">X</span>
         </div>
+      </div>
+      <div style="padding: 0; height: 400px;">
+        <iframe src="https://iframe.chat/embed?chat=17462978" id="chattable" style="width: 100%; height: 100%; border: none; display: block;"></iframe>
+      </div>
     </div>
 
-    <div class="back-button-wrapper">
-        <div class="back-button">
-            <a href="/index.html">Back to Start</a>
+    <div id="game-box" class="box">
+      <div class="title-bar">
+        <span id="game-title">Greg's Game</span>
+        <div class="title-btns">
+          <span class="btn">_</span>
+          <span class="btn">□</span>
+          <span class="btn">X</span>
         </div>
+      </div>
+      <canvas id="kaplay-game"></canvas>
+      <div class="title-bar">
+        <span>Name (enter to save)</span>
+        <input type="text" id="name-input" name="name-input">
+      </div>
     </div>
+  </div>
 
-    <script src="/src/neko.js"></script>
-    <script src="/src/drag.js"></script>
-    <script> chattable.initialize({ stylesheet: "/chattable.css" }); </script>
+  <div class="back-button-wrapper">
+    <div class="back-button">
+      <a href="/index.html">Back to Start</a>
+    </div>
+  </div>
+
+</div>
+
+<script src="/src/neko.js"></script>
+<script src="/src/drag.js"></script>
+<script> chattable.initialize({ stylesheet: "/chattable.css" }); </script>
 </body>
-
 </html>

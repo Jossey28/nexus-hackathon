@@ -1,23 +1,23 @@
 * {
   cursor: url('/cursor/green_kitty.png'), auto;
 }
-
 a, button, .clickable {
   cursor: url('/cursor/green_paw.png'), pointer;
 }
-
 html, body {
   height: 100%;
   margin: 0;
-} 
-
+}
 body {
   background-image: url('/img/beach.webp');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
 }
-
+.column {
+  max-width: 1100px;
+  margin: 0 auto;
+}
 .box {
   border: 2px solid #4932C9;
   background: #E2E2E2;
@@ -25,15 +25,12 @@ body {
   box-shadow: 4px 4px rgba(80, 20, 255, 0.2);
   width: fit-content;
 }
-
 .box:hover {
   background: #94F1E1;
 }
-
 .box:hover .title-bar {
   background: #EDD0EE;
 }
-
 .title-bar {
   border: 2px solid #4932C9;
   background: #E2E2E2;
@@ -51,12 +48,10 @@ body {
   user-select: none;
   cursor: move;
 }
-
 .title-btns {
   display: flex;
   gap: 3px;
 }
-
 .btn {
   width: 16px;
   height: 16px;
@@ -70,16 +65,14 @@ body {
   cursor: default;
   user-select: none;
 }
-
 .content-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 30px;
   max-width: 900px;
   margin: 40px auto;
   align-items: flex-start;
 }
-
 .page-title {
   width: 100%;
   font-family: monospace;
@@ -89,27 +82,23 @@ body {
   text-shadow: 2px 2px 0 #4932C9, 4px 4px 0 rgba(0,0,0,0.3);
   margin: 0 0 10px 0;
 }
-
 .page-subtitle {
   font-size: 24px;
   color: #4932C9;
   text-shadow: none;
 }
-
 #game-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 16px;
-  margin: 100px 0 200px 0;
+  gap: 30px;
+  margin: 100px 0 60px 0;
 }
-
 #kaplay-game {
   display: block;
   border: 2px solid #4932C9;
   margin-top: 4px;
 }
-
 .greg-tophat {
   width: 32px;
   height: 32px;
@@ -121,29 +110,24 @@ body {
   transform-origin: center;
   animation: idle-cycle 0.8s steps(4) infinite;
 }
-
 @keyframes idle-cycle {
   from { background-position: 0px 0px; }
   to { background-position: 0px -128px; }
 }
-
 .text-box {
   margin-top: 24px;
   border: 2px solid transparent;
   padding: 6px;
   transition: border-color 0.2s ease;
 }
-
 .text-box:hover {
   border-color: #4932C9;
 }
-
 .back-button-wrapper {
   display: flex;
   justify-content: center;
-  margin: 60px 0;
+  margin: 40px 0 60px 0;
 }
-
 .back-button {
   border-radius: 2em;
   background: linear-gradient(to left, #4932C9 0%, #94F1E1 100%);
@@ -160,19 +144,16 @@ body {
   flex-wrap: wrap;
   width: auto;
 }
-
 .back-button:hover {
   padding: 24px;
   font-size: 27px;
   filter: brightness(110%);
   letter-spacing: 3px;
 }
-
 .back-button a {
   color: white;
   text-decoration: none;
 }
-
 @media screen and (max-width: 750px) {
   .back-button {
     width: 90%;

@@ -1,4 +1,10 @@
 function freezeBoxPositions() {
+  const containers = document.querySelectorAll(".content-grid, #game-container");
+  containers.forEach((container) => {
+    const rect = container.getBoundingClientRect();
+    container.style.height = `${rect.height}px`;
+  });
+
   const boxes = document.querySelectorAll(".box");
 
   const positions = Array.from(boxes).map((box) => {
