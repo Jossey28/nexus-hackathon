@@ -1,3 +1,24 @@
+function freezeBoxPositions() {
+  const boxes = document.querySelectorAll(".box");
+
+  const positions = Array.from(boxes).map((box) => {
+    const rect = box.getBoundingClientRect();
+    return {
+      left: rect.left + window.scrollX,
+      top: rect.top + window.scrollY,
+    };
+  });
+
+  boxes.forEach((box, i) => {
+    box.style.position = "absolute";
+    box.style.left = `${positions[i].left}px`;
+    box.style.top = `${positions[i].top}px`;
+    box.style.margin = "0";
+  });
+}
+
+window.addEventListener("load", freezeBoxPositions);
+
 function makeDraggable() {
   const boxes = document.querySelectorAll(".box");
 
