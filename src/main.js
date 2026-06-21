@@ -39,7 +39,7 @@ loadSpriteAtlas("sprites/sprite-sheet-cat.png", {
     "catSeeking": {
         "x": 4,
         "y": 683,
-        "width": 128,
+        "width": 131,
         "height": 32,
         "sliceX": 4,
         "anims": {
@@ -48,6 +48,22 @@ loadSpriteAtlas("sprites/sprite-sheet-cat.png", {
                 "to": 3,
                 "speed": 1,
                 "loop": true,
+            }
+        },
+    },
+    "catRunning": {
+        "x": 5,
+        "y": 420,
+        "width": 227,
+        // "width": 174,
+        "height": 40,
+        "sliceX": 7,
+        "anims": {
+            "run": {
+                "from": 0,
+                "to": 6,
+                "speed": 2,
+                "loop": true
             }
         },
     },
@@ -141,9 +157,9 @@ scene("game_loop", () => {
     const cat = add([
         anchor("center"),
 
-        sprite("catSeeking", {
+        sprite("catRunning", {
             frame: 0,
-            anim: "idle",
+            anim: "run",
         }),
 
         scale(4),
