@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>bird</title>
+<link rel="stylesheet" href="/index.css">
+<script src="https://iframe.chat/scripts/main.min.js"></script>
+</head>
+<body>
+<script src="src/main.js" type="module"></script>
+
+<div class="content-grid">
+<h1 class="page-title">Greg 🐸 <span class="page-subtitle">The Frog</span></h1>
+
+<div class="box" style="width: 280px;">
+<div class="title-bar">
+<span>Profile</span>
+<div class="title-btns">
+<span class="btn">_</span>
+<span class="btn">□</span>
+<span class="btn">X</span>
+</div>
+</div>
+<div style="padding: 20px; text-align: center;">
+<div class="greg-tophat"></div>
+<div class="text-box">
+<p>name ★ age ★ date</p>
+</div>
+</div>
+</div>
+
+<div class="box" style="flex: 1;">
+<div class="title-bar">
+<span>About</span>
+<div class="title-btns">
+<span class="btn">_</span>
+<span class="btn">□</span>
+<span class="btn">X</span>
+</div>
+</div>
+<div style="padding: 20px;">
+<p>greg greg greg.</p>
+</div>
+</div>
+</div>
+
+<div id="game-container">
+<div class="box" style="width: 350px;">
+<div class="title-bar">
+<span>chat</span>
+<div class="title-btns">
+<span class="btn">_</span>
+<span class="btn">□</span>
+<span class="btn">X</span>
+</div>
+</div>
+<div style="padding: 0; height: 400px;">
+<iframe src="https://iframe.chat/embed?chat=17462978" id="chattable" style="width: 100%; height: 100%; border: none; display: block; z-index: 2;"></iframe>
+</div>
+</div>
+
+<div id="game-box" class="box">
+<div class="title-bar">
+<span>Game</span>
+<div class="title-btns">
+<span class="btn">_</span>
+<span class="btn">□</span>
+<span class="btn">X</span>
+</div>
+</div>
+<canvas id="kaplay-game"></canvas>
+</div>
+</div>
+
+<script src="/src/neko.js"></script>
+<script src="/src/drag.js"></script>
+<script> chattable.initialize({ stylesheet: "/chattable.css" }); </script>
+</body>
+</html>

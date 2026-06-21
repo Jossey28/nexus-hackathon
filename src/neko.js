@@ -65,6 +65,60 @@
   flyEl.style.top = "200px";
   document.body.appendChild(flyEl);
 
+  // --- judging popup banner, built as its own self-contained function ---
+  function createJudgePopup() {
+    const popup = document.createElement("div");
+    popup.style.position = "fixed";
+    popup.style.top = "20px";
+    popup.style.left = "20px";
+    popup.style.display = "flex";
+    popup.style.alignItems = "center";
+    popup.style.gap = "10px";
+    popup.style.background = "linear-gradient(135deg, #E2E2E2, #C9B8E8)";
+    popup.style.border = "2px solid #4932C9";
+    popup.style.borderRadius = "8px";
+    popup.style.padding = "8px 16px";
+    popup.style.boxShadow = "4px 4px 0 rgba(0,0,0,0.2)";
+    popup.style.fontFamily = "monospace";
+    popup.style.zIndex = "999";
+    popup.style.transform = "translateX(-120%) scale(2.0)";
+    popup.style.transition = "transform 0.4s ease";
+    popup.style.opacity = "0";
+    popup.style.pointerEvents = "none";
+
+    const icon = document.createElement("div");
+    icon.style.width = "32px";
+    icon.style.height = "32px";
+    icon.style.backgroundImage = `url('${judgeSheet}')`;
+    icon.style.backgroundPosition = "0px 0px";
+    icon.style.imageRendering = "pixelated";
+    icon.style.transform = "scale(1.5)";
+    icon.style.transformOrigin = "center";
+
+    const text = document.createElement("div");
+    text.innerHTML = `<div style="font-weight:bold; color:#4932C9;">Greg is judging you</div><div style="font-size:12px; color:#4932C9;">You died. Again.</div>`;
+
+    popup.appendChild(icon);
+    popup.appendChild(text);
+    document.body.appendChild(popup);
+
+    let hideTimeout = null;
+
+    return {
+      show() {
+        popup.style.transform = "translateX(0) scale(2.0)";
+        popup.style.opacity = "1";
+        if (hideTimeout) clearTimeout(hideTimeout);
+        hideTimeout = setTimeout(() => {
+          popup.style.transform = "translateX(-120%) scale(2.0)";
+          popup.style.opacity = "0";
+        }, 5000);
+      },
+    };
+  }
+
+  const judgePopup = createJudgePopup();
+
   function isInsideBox(x, y, padding = 0) {
     if (!boxEl) return false;
     const rect = boxEl.getBoundingClientRect();
@@ -167,7 +221,7 @@
       const flyDist = Math.sqrt(flyDx * flyDx + flyDy * flyDy);
 
       if (flyDist > 2) {
-        const flySpeed = 4;
+        const flySpeed = 3;
         const nextFlyX = currentFlyX + (flyDx / flyDist) * flySpeed;
         const nextFlyY = currentFlyY + (flyDy / flyDist) * flySpeed;
 
@@ -185,6 +239,7 @@
         judging = true;
         judgingFrameCount = 0;
         lastJudgingTick = timestamp;
+        judgePopup.show();
       }
       lastDeathState = currentDeathState;
 
@@ -251,7 +306,7 @@
         const jumpRow = directionRows.indexOf(horizontalFlipMap[dirName]);
 
         if (moving) {
-          const speed = 12.5;
+          const speed = 11;
           let nextX = posX + (dx / dist) * speed;
           let nextY = posY + (dy / dist) * speed;
 
