@@ -6,7 +6,7 @@ const GRAVITY = 0;
 const MAX_UP_FORCE = 10;
 const MAX_DOWN_FORCE = 10;
 
-const WINDOW_WIDTH = 700;
+const WINDOW_WIDTH = 850;
 const WINDOW_HEIGHT = 700;
 
 let highestScore = 0;

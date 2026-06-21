@@ -4,11 +4,11 @@
   const frogEl = document.createElement("div");
   const frameW = 32;
   const frameH = 32;
-  const scale = 3.5;
+  const scale = 4.5;
   const idleFrames = 5;
   const jumpFrames = 8;
   const directionRows = ["S", "SW", "W", "NW", "N", "NE", "E", "SE"];
-  const boxEl = document.querySelector(".box");
+  const boxEl = document.getElementById("game-box");
 
   const clownSheet = "/sprites/frog-fly.png";
   const croakRows = [0, 1, 2];
@@ -52,7 +52,7 @@
   const flyEl = document.createElement("div");
   const flyFrameW = 32;
   const flyFrameH = 32;
-  const flyScale = 3;
+  const flyScale = 3.5;
   flyEl.style.position = "fixed";
   flyEl.style.width = `${flyFrameW}px`;
   flyEl.style.height = `${flyFrameH}px`;
@@ -167,7 +167,7 @@
       const flyDist = Math.sqrt(flyDx * flyDx + flyDy * flyDy);
 
       if (flyDist > 2) {
-        const flySpeed = 3;
+        const flySpeed = 4;
         const nextFlyX = currentFlyX + (flyDx / flyDist) * flySpeed;
         const nextFlyY = currentFlyY + (flyDy / flyDist) * flySpeed;
 
@@ -251,7 +251,7 @@
         const jumpRow = directionRows.indexOf(horizontalFlipMap[dirName]);
 
         if (moving) {
-          const speed = 11;
+          const speed = 12.5;
           let nextX = posX + (dx / dist) * speed;
           let nextY = posY + (dy / dist) * speed;
 

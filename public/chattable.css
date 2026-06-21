@@ -1,0 +1,51 @@
+body {
+  background: #E2E2E2;
+}
+
+.msgWrapper {
+  color: #4932C9;
+  font-family: monospace;
+  font-size: 16px;
+  display: flex;
+}
+
+.msgWrapper:has(.sent) {
+  flex-direction: row-reverse;
+}
+
+.allMessages {
+  display: inline-block;
+  margin: 12px;
+  border-radius: 8px;
+  padding: 8px;
+  max-width: calc(100% - 48px);
+  background: var(--msg-bg-color);
+}
+
+.sent {
+  --msg-bg-color: #94F1E1;
+}
+
+.recieved {
+  --msg-bg-color: #F8E1FB;
+}
+
+#background {
+  background: #E2E2E2;
+  height: calc(100% - 42px) !important;
+}
+
+#input {
+  background: #F8E1FB;
+  border-radius: 0;
+  color: #4932C9;
+  font-family: monospace;
+}
+
+#top_banner {
+  display: none;
+}
+
+#settings {
+  opacity: 0.8;
+}
