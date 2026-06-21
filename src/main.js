@@ -13,8 +13,6 @@ const nameField = document.getElementById("name-input");
 const gameTitle = document.getElementById("game-title");
 
 
-let highestScore = 0;
-
 const k = kaplay({
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT,
@@ -36,13 +34,33 @@ const k = kaplay({
     }
 });
 
+let playerName;
+let highestScore = 0;
+
+localStorage.setItem("leaderboard", "[]");
+
 nameField.addEventListener("keydown", function (event) {
     console.log("I hope this works");
     if (event.key == "Enter") {
-        gameTitle.textContent = `Greg's Game (${nameField.value} playing)`;
+        playerName = nameField.value;
+        gameTitle.textContent = `Greg's Game (${playerName} playing)`;
         console.log("Updated title:", gameTitle);
     }
 });
+
+function reloadLeaderboard() {
+    const currentData = JSON.parse(localStorage.getItem("leaderboard"));
+
+    if (currentData == "[]") {
+        return;
+    };
+
+    currentData.sort((a, b) => a.score - b.score);
+    const leaderboardDiv = document.getElementById("leaderboard-text")
+    for (const item of currentData) {
+        leaderboardDiv.insertAdjacentHTML("afterbegin", `<li>${item.username}: ${item.score}<li>`);
+    }
+}
 
 loadRoot("./"); // A good idea for Itch.io publishing later
 
@@ -99,10 +117,10 @@ scene("game_loop", () => {
         layer("game")
     ]);
 
-    let score = 0;
+    let gameScore = 0;
 
     const scoreLabel = game.add([
-        text(`${score}`, { size: 45 }),
+        text(`${gameScore}`, { size: 45 }),
         pos(width() - 50, floorThickness),
         fixed(),
         z(100),
@@ -122,8 +140,8 @@ scene("game_loop", () => {
     ]);
 
     function addScore() {
-        score++;
-        scoreLabel.text = `${score} Dodged`;
+        gameScore++;
+        scoreLabel.text = `${gameScore} Dodged`;
     }
 
 
@@ -200,12 +218,14 @@ scene("game_loop", () => {
             go("title_screen")
         };
 
-        airSpeed = airSpeed + (score * 5);
-        bird.applyImpulse(vec2(-1 + (score * -0.1), 0));
+        airSpeed = airSpeed + (gameScore * 5);
+        bird.applyImpulse(vec2(-1 + (gameScore * -0.1), 0));
     })
 
     bird.onCollide("instant-death", () => {
         debug.log("you just died");
+
+        bird.unuse("area");
 
         addKaboom(bird.pos);
         window.deathPixel.textContent = "dead";
@@ -218,11 +238,26 @@ scene("game_loop", () => {
             direction: "forward",
         });
 
+        if (playerName == "") {
+            playerName = "unknown"
+        }
+
+        const currentData = localStorage.getItem("leaderboard");
+        const currentList = JSON.parse(currentData);
+        const userData = {
+            username: playerName,
+            score: gameScore
+        }
+        currentList.push(userData);
+        localStorage.setItem("leaderboard", JSON.stringify(currentList));
 
         wait(2, () => {
+            reloadLeaderboard();
             go("title_screen");
         })
     })
+
+
 
     onButtonDown("flyUp", () => {
         bird.applyImpulse(vec2(0, -MAX_UP_FORCE * Math.random()));
