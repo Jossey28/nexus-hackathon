@@ -35,6 +35,21 @@ const k = kaplay({
 loadRoot("./"); // A good idea for Itch.io publishing later
 
 loadSprite("bird", "sprites/bird.png");
+loadSprite("idleCat", "sprites/Black-Idle.png", {
+    sliceX: 12,
+    sliceY: 1,
+    anims: {
+        idle: { from: 0, to: 11, loop: true },
+    }
+});
+
+loadSprite("runningCat", "sprites/Black-Run.png", {
+    sliceX: 12,
+    sliceY: 1,
+    anims: {
+        running: { from: 0, to: 6, loop: true },
+    }
+});
 
 setGravity(GRAVITY);
 
@@ -47,7 +62,7 @@ scene("game_loop", () => {
     window.deathPixel.textContent = "alive";
 
     const floorThickness = 25;
-    const floorColor = Color.fromHex("#8B5E3C")
+    const floorColor = Color.fromHex("#8B5E3C");
 
     const game = add([
         timer(),
@@ -102,21 +117,6 @@ scene("game_loop", () => {
         "instant-death"
     ]);
 
-    const bird = game.add([
-        sprite("bird"),
-        scale(0.25),
-
-        anchor("center"),
-        rotate(90),
-
-        pos(center()),
-        area(),
-        body(),
-        animate(),
-
-        "player",
-    ]);
-
     function spawnAirEffect() {
         const makeAirEffect = game.add([
             pos(width(), Math.floor(Math.random() * (675 - ground.height + 1)) + ground.height),
@@ -135,6 +135,36 @@ scene("game_loop", () => {
         })
     }
 
+    game.loop(1, spawnAirEffect)
+
+    // const cat = add([
+    //     anchor("center"),
+
+    //     sprite("cat", {
+    //         frame: 0,
+    //         anim: "running",
+    //     }),
+
+    //     scale(2),
+    //     pos(40, height() - (floorThickness * 3) + 3),
+    // ])
+
+    const bird = game.add([
+        sprite("bird"),
+        scale(0.25),
+
+        anchor("center"),
+        rotate(90),
+
+        pos(center()),
+        area(),
+        body(),
+        animate(),
+
+        "player",
+    ]);
+
+
     bird.onUpdate(() => {
         if (bird.pos.x > (800) || bird.pos.x < 10) {
             window.deathPixel.textContent = "dead";
@@ -152,10 +182,13 @@ scene("game_loop", () => {
         window.deathPixel.textContent = "dead";
         // bird.pos += vec2(dt(), dt())
 
+        bird.applyImpulse(vec2(50, 0));
+
         bird.animate("angle", [90, 450], {
             duration: 1,
             direction: "forward",
         });
+
 
         wait(2, () => {
             go("title_screen");
@@ -189,10 +222,12 @@ scene("game_loop", () => {
         });
     })
 
-    game.loop(1, spawnAirEffect)
 })
 
 scene("title_screen", () => {
+    const floorThickness = 25;
+    const floorColor = Color.fromHex("#8B5E3C");
+
     const titleMenu = add([
         rect(300, 260, { radius: 10 }),
         color(255, 255, 255),
@@ -247,14 +282,41 @@ scene("title_screen", () => {
         ])
     );
 
-    // titleMenu.add([
-    //     text(`highest score: ${highestScore}`)
+    const ceiling = add([
+        rect(width(), floorThickness),
+        pos(0, 0),
+        color(Color.fromHex("#8B5E3C")),
+        area({ isSensor: true }),
+
+        "instant-death",
+    ]);
+
+    const ground = add([
+        rect(width(), floorThickness),
+        pos(0, height() - floorThickness),
+        color(floorColor),
+        area(),
+        area({ isSensor: true }),
+
+        "instant-death"
+    ]);
+
+    // const cat = add([
+    //     anchor("center"),
+
+    //     sprite("idleCat", {
+    //         frame: 0,
+    //         anim: "idle",
+    //     }),
+
+    //     scale(2),
+    //     pos(40, height() - (floorThickness * 3) + 3),
     // ])
 })
 
 scene("instructions", () => {
     const instructionsMenu = add([
-        rect(400, 300, { radius: 10 }),
+        rect(400, 350, { radius: 10 }),
         color(255, 255, 255),
         outline(4),
         anchor("center"),
@@ -269,7 +331,7 @@ scene("instructions", () => {
     ]);
 
     title.add([
-        text("w/up/left-click => hold to increase upwards velocity\n\ns/down/right-click => hold to increase downwards velocity.\n\nTry not to get hit!!", { size: 19, width: instructionsMenu.width - instructionsMenu.width / 20 }),
+        text("w/up/left-click => hold to increase upwards velocity\n\ns/down/right-click => hold to increase downwards velocity.\n\nShift => Speed boost\n\nTry not to get hit!!", { size: 19, width: instructionsMenu.width - instructionsMenu.width / 20 }),
         color(BLACK),
         anchor("top"),
         pos(instructionsMenu.width / 20, title.height * 1.5),
@@ -312,4 +374,6 @@ scene("instructions", () => {
     ])
 })
 
-go("title_screen")
+onLoad(() => {
+    go("title_screen")
+})
