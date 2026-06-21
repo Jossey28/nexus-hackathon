@@ -37,7 +37,7 @@
   let judgingFrameCount = 0;
   let lastJudgingTick = 0;
   const judgingSpeed = 300;
-  const judgingFrames = 3;
+  const judgingFrames = 2;
 
   frogEl.style.position = "fixed";
   frogEl.style.width = `${frameW}px`;
@@ -45,7 +45,7 @@
   frogEl.style.transform = `scale(${scale})`;
   frogEl.style.transformOrigin = "top left";
   frogEl.style.imageRendering = "pixelated";
-  frogEl.style.zIndex = "1";
+  frogEl.style.zIndex = "0";
   frogEl.style.cursor = "grab";
   document.body.appendChild(frogEl);
 
@@ -59,7 +59,7 @@
   flyEl.style.backgroundImage = "url('/sprites/fly.png')";
   flyEl.style.transform = `scale(${flyScale})`;
   flyEl.style.transformOrigin = "top left";
-  flyEl.style.zIndex = "1";
+  flyEl.style.zIndex = "0";
   flyEl.style.imageRendering = "pixelated";
   flyEl.style.left = "200px";
   flyEl.style.top = "200px";

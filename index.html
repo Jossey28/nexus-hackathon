@@ -1,44 +1,43 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <title>bird</title>
-    <link rel="stylesheet" href="/index.css">
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>bird</title>
+<link rel="stylesheet" href="/index.css">
 </head>
-
 <body style="overflow:hidden">
-    <script src="src/main.js" type="module"></script>
-    <div id="game-container">
-    <div class="box">
-        <div class="title-bar">
-        <span>Game</span>
-        <div class="title-btns">
-            <span class="btn">_</span>
-            <span class="btn">□</span>
-            <span class="btn">X</span>
-        </div>
-        </div>
-        <canvas id="kaplay-game"></canvas>
-    </div>
-    <div` class="box">
-        <div class="title-bar"> 
+<script src="src/main.js" type="module"></script>
 
-          <div class="window">
-            <div class="title ico-home">
-              <span>home</span>
-            </div>
-            <div class="box" style="padding: 8px;">
-              <div style="flex: 1 1 0;">
-                <p style="margin-top:0;">greg greg greg 🐳 <img style=" width: 20px; height: 20px; vertical-align: text-bottom; background-position: -0px -0px; " class="emoji"></p>
-              </div>
-            </div>
-        
-        </div>
+<div id="game-container">
+  <div id="game-box" class="box">
+    <div class="title-bar">
+      <span>Game</span>
+      <div class="title-btns">
+        <span class="btn">_</span>
+        <span class="btn">□</span>
+        <span class="btn">X</span>
+      </div>
     </div>
-    <script src="/src/neko.js"></script>
-    <script src="/src/drag.js"></script>
+    <canvas id="kaplay-game"></canvas>
+  </div>
+</div>
+
+<div id="context-box" class="box" style="width: 400px; top: 100px; left: 100px;">
+  <div class="title-bar">
+    <span>Context</span>
+    <div class="title-btns">
+      <span class="btn">_</span>
+      <span class="btn">□</span>
+      <span class="btn">X</span>
+    </div>
+  </div>
+  <div style="padding: 12px;">
+    <p>greg greg greg.</p>
+  </div>
+</div>
+
+<script src="/src/neko.js"></script>
+<script src="/src/drag.js"></script>
 </body>
-
 </html>
