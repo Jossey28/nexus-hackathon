@@ -44,7 +44,7 @@ window.deathPixel.textContent = "alive";
 
 scene("game_loop", () => {
     window.deathPixel.textContent = "alive";
-    
+
     const game = add([
         timer(),
         layer("game")
@@ -123,7 +123,7 @@ scene("game_loop", () => {
             move(LEFT, airSpeed),
             offscreen({ destroy: true }),
 
-            "harmless",
+            "instant-death",
         ];
 
         game.add(makeAirEffect(10, 30, 5));
@@ -156,11 +156,11 @@ scene("game_loop", () => {
     onClick(() => addKaboom(mousePos()));
 
     onButtonDown("flyUp", () => {
-        bird.applyImpulse(vec2(0, MAX_UP_FORCE * Math.random()));
+        bird.applyImpulse(vec2(0, -MAX_UP_FORCE * Math.random()));
     })
 
     onButtonDown("flyDown", () => {
-        bird.applyImpulse(vec2(0, -MAX_DOWN_FORCE * Math.random()));
+        bird.applyImpulse(vec2(0, MAX_DOWN_FORCE * Math.random()));
     })
 
     const oldAirSpeed = airSpeed;
