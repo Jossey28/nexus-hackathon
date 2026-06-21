@@ -8,7 +8,8 @@
 <style>
 @font-face {
   font-family: 'FF Confidential';
-  src: url('/fonts/Confidential-Regular.ttf') format('truetype');
+  src: url('/fonts/Confidential-Regular.otf') format('opentype'),
+       url('/fonts/Confidential-Regular.ttf') format('truetype');
 }
 body {
   margin: 0;
@@ -25,41 +26,48 @@ body {
 .greg-viking {
   width: 32px;
   height: 32px;
+  margin-top: -100px;
+  margin-bottom: 40px;
   background-image: url('/sprites/frog-viking.png');
   background-position: 0px 0px;
   image-rendering: pixelated;
-  animation: floatUpDown 5s ease-in-out infinite alternate,
-             fadeIn 2s ease-out forwards,
-             viking-idle 0.8s steps(4) infinite;
   transform: scale(4);
   transform-origin: center;
-  margin-bottom: 20px;
+  animation:
+    floatUpDown 5s ease-in-out infinite alternate,
+    fadeIn 2s ease-out forwards,
+    viking-idle 0.8s steps(4) infinite;
 }
 @keyframes floatUpDown {
   from { transform: scale(4) translateY(0); }
-  to { transform: scale(4) translateY(-15px); }
+  to   { transform: scale(4) translateY(-15px); }
 }
 @keyframes viking-idle {
   from { background-position: 0px 0px; }
-  to { background-position: 0px -128px; }
+  to   { background-position: 0px -128px; }
 }
 .bevisible {
-  animation: fadeIn 2s ease-out forwards;
   opacity: 0;
+  animation: fadeIn 2s ease-out forwards;
 }
 @keyframes fadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 h1 {
-  font-size: 48px;
-  letter-spacing: 2px;
   margin: 10px 20px;
+  padding: 20px 0;
+  font-size: 100px;
+  letter-spacing: 4px;
+  font-style: italic;
+  font-weight: bold;
+  transform: scaleY(1.3) skewX(-5deg);
+  text-shadow: 2px 2px 0 rgba(255,255,255,0.2);
 }
 p {
-  max-width: 500px;
+  max-width: 800px;
   margin: 10px 20px;
-  font-size: 18px;
+  font-size: 30px;
   font-family: monospace;
 }
 a {
@@ -72,8 +80,14 @@ a {
 
 <div class="greg-viking"></div>
 <h1 class="bevisible">GREG</h1>
-<p class="bevisible">Welcome to Greg's site! A quick warning before you enter — this game involves repeated death and frog-related judgment.</p>
-<p class="bevisible">Click <a href="/main.html">here</a> to continue!</p>
+<p class="bevisible">
+  Be nice to us folk 🥺✌ we're new here. Combined coding experience:
+  about 2 months.
+  <br> If you liked this, please vote for us. Every upvote = $1 to charity. We mean it. Trust 🥺
+</p>
+<p class="bevisible">
+  Click <a href="/main.html">here</a> to continue!
+</p>
 
 </body>
 </html>
