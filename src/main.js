@@ -35,20 +35,22 @@ const k = kaplay({
 loadRoot("./"); // A good idea for Itch.io publishing later
 
 loadSprite("bird", "sprites/bird.png");
-loadSprite("idleCat", "sprites/Black-Idle.png", {
-    sliceX: 12,
-    sliceY: 1,
-    anims: {
-        idle: { from: 0, to: 11, loop: true },
-    }
-});
-
-loadSprite("runningCat", "sprites/Black-Run.png", {
-    sliceX: 12,
-    sliceY: 1,
-    anims: {
-        running: { from: 0, to: 6, loop: true },
-    }
+loadSpriteAtlas("sprites/sprite-sheet-cat.png", {
+    "catSeeking": {
+        "x": 4,
+        "y": 683,
+        "width": 128,
+        "height": 32,
+        "sliceX": 4,
+        "anims": {
+            "idle": {
+                "from": 0,
+                "to": 3,
+                "speed": 1,
+                "loop": true,
+            }
+        },
+    },
 });
 
 setGravity(GRAVITY);
@@ -79,7 +81,6 @@ scene("game_loop", () => {
     ]);
 
     scoreLabel.text += " Dodged"
-
 
     const scoreChecker = game.add([
         anchor("center"),
@@ -137,17 +138,17 @@ scene("game_loop", () => {
 
     game.loop(1, spawnAirEffect)
 
-    // const cat = add([
-    //     anchor("center"),
+    const cat = add([
+        anchor("center"),
 
-    //     sprite("cat", {
-    //         frame: 0,
-    //         anim: "running",
-    //     }),
+        sprite("catSeeking", {
+            frame: 0,
+            anim: "idle",
+        }),
 
-    //     scale(2),
-    //     pos(40, height() - (floorThickness * 3) + 3),
-    // ])
+        scale(4),
+        pos(60, height() - (floorThickness)),
+    ]);
 
     const bird = game.add([
         sprite("bird"),
@@ -301,20 +302,55 @@ scene("title_screen", () => {
         "instant-death"
     ]);
 
-    // const cat = add([
-    //     anchor("center"),
+    const cat = add([
+        anchor("center"),
 
-    //     sprite("idleCat", {
-    //         frame: 0,
-    //         anim: "idle",
-    //     }),
+        sprite("catSeeking", {
+            frame: 0,
+            anim: "idle",
+        }),
 
-    //     scale(2),
-    //     pos(40, height() - (floorThickness * 3) + 3),
-    // ])
+        scale(4),
+        pos(60, height() - (floorThickness)),
+    ]);
+
 })
 
 scene("instructions", () => {
+    const floorThickness = 25;
+    const floorColor = Color.fromHex("#8B5E3C");
+
+    const ceiling = add([
+        rect(width(), floorThickness),
+        pos(0, 0),
+        color(Color.fromHex("#8B5E3C")),
+        area({ isSensor: true }),
+
+        "instant-death",
+    ]);
+
+    const ground = add([
+        rect(width(), floorThickness),
+        pos(0, height() - floorThickness),
+        color(floorColor),
+        area(),
+        area({ isSensor: true }),
+
+        "instant-death"
+    ]);
+
+    const cat = add([
+        anchor("center"),
+
+        sprite("catSeeking", {
+            frame: 0,
+            anim: "idle",
+        }),
+
+        scale(4),
+        pos(60, height() - (floorThickness)),
+    ]);
+
     const instructionsMenu = add([
         rect(400, 350, { radius: 10 }),
         color(255, 255, 255),
